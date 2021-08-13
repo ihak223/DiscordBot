@@ -4,7 +4,8 @@ import time
 import threading
 from exts.twitch import *
 import sys
-
+import random
+import json
 
 class BotClient(discord.Client):
 
@@ -56,10 +57,12 @@ class BotClient(discord.Client):
 
             else:
                 await m.channel.send("v0ltpat is not currently live right now:\nhttps://www.twitch.tv/v0ltpat")
-        elif m.content == "ping":
-            await m.channel.send("pong!")
         elif m.content == "sources":
-
+            await m.channel.send("https://github.com/ihak223/DiscordBot")
+        else:
+            responses = json.loads(open("responses\\responses.json").read())
+            print("[Internal] Sent : "+random.choice(responses[m.content.lower()]))
+            await m.channel.send(random.choice(responses[m.content.lower()]))
 
 
 bot = BotClient()
