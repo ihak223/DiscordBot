@@ -2,6 +2,7 @@ import discord
 import time
 import threading
 from exts.twitch import *
+import sys
 
 # Client
 client = discord.Client()
@@ -21,7 +22,7 @@ def run_check():
 
 # Run Discord Client
 def run_client():
-    client.run("ODc1NDg1OTU2MjA2MTMzMjU5.YRWN1Q.0Qmt1SmNhvWSFyW21qz1R_k-UqY")
+    client.run(sys.argv[1])
 
 # Bot Ready Function
 @client.event
