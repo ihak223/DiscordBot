@@ -7,36 +7,53 @@ import sys
 import random
 import json
 
+
 class BotClient(discord.Client):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, token, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # sets object attributes
+        self.memory = []
+        self.token = token
         self.msg = "@everyone v0ltpat is currently live on:\nhttps://www.twitch.tv/v0ltpat"
         self.msged = False
-        self.check.start()
+        self.background_tasks.start()
 
-    # Run Twitch Check
+    # background tasks
     @tasks.loop(seconds=10)
-    async def check(self):
+    async def background_tasks(self):
+        print("[Internal] Looping background tasks")
         # Check If Pat Is Online
-        if not is_online("v0ltpat"):
+        i = 0
+        if is_online("v0ltpat"):
+
             # Sends MSG To Channel
-            if self.msged:
+            if not self.msged:
                 print("[Internal] v0ltpat is online")
                 channel = self.get_channel(872972403368677437)
                 await channel.send(self.msg)
                 self.msged = True
                 print("[Internal] Sent Announcement")
-        else:
-            self.msged = False
+            else:
+                print(self.msged)
 
-    @check.before_loop
-    async def before_my_task(self):
+        else:
+            if i <= 3:
+                self.msged = False
+                i = 0
+            else:
+                i += 1
+
+
+    @background_tasks.before_loop
+    async def before_tasks(self):
+        print("[Internal] Running background tasks")
         await self.wait_until_ready()  # wait until the bot logs in
 
     # Run Discord Client
     def run_client(self):
-        self.run(sys.argv[1])
+        self.run(self.token)
 
     # Bot Ready Function
     async def on_ready(self):
@@ -59,11 +76,28 @@ class BotClient(discord.Client):
                 await m.channel.send("v0ltpat is not currently live right now:\nhttps://www.twitch.tv/v0ltpat")
         elif m.content == "sources":
             await m.channel.send("https://github.com/ihak223/DiscordBot")
+        elif m.content.split(":")[0] == "cadd":
+            central_command = m.content.split(":")[1]
+            file = json.loads(open("responses\\responses.json").read())
+            string = "{\""+central_command.split(", ")[0].lstrip()+"\": "+"[\""+central_command.split(", ")[1].lstrip()+"\"]"+"}"
+            z = {**file, **json.loads(string)}
+            open("responses\\responses.json", "w").write(json.dumps(z))
+        # elif m.content.split()[0] == "memory":
+            # if m.content.split()[1] == "add":
+
         else:
-            responses = json.loads(open("responses\\responses.json").read())
-            print("[Internal] Sent : "+random.choice(responses[m.content.lower()]))
-            await m.channel.send(random.choice(responses[m.content.lower()]))
+            try:
+                responses = json.loads(open("responses\\responses.json", "r").read())
+                print("[Internal] Sent : " + random.choice(responses[m.content.lower()]))
+                response = random.choice(responses[m.content.lower()])
+                if response[0] == "%":
+                    exec(response[1:])
+                else:
+                    await m.channel.send(response)
+            except KeyError:
+                print("[Internal] No Command")
 
 
-bot = BotClient()
-bot.run(sys.argv[1])
+
+bot = BotClient(sys.argv[1])
+bot.run_client()

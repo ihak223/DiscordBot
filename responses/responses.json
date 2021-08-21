@@ -1,6 +1,1 @@
-{
-  "ping": ["pong"],
-  "ur mom": ["yes indeed young padawan", "no", "So You are also a member of the high elves?", "haha'", "no, for this scenario I would use the term 'Ur Dad'"],
-  "does the bot work?": ["yes...", "mostly", "judging by this message, i think i work"],
-
-}
+{"ping": ["pong"], "ur mom": ["yes indeed young padawan", "no", "So You are also a member of the high elves?", "haha", "no, for this scenario I would use the term 'Ur Dad'"], "does the bot work?": ["yes...", "mostly", "judging by this message, i think i work"], "whos the creator of the bot?": ["@ihak223"], "2b2t is": ["***The Oldest Anarchy Server In Minecraft***"], "test": "test", "hello": ["hello"], "check": ["12"], "name?": ["v0ltbot"], "fun fact": ["v0ltbot is Turing complete"], "hi": ["hello"], "like": ["this"], "{<@732062515059490840>}": ["{Dont"], "<@!732062515059490840>": ["dont@him"], "abc": ["efg"], "hij": ["lmn"], "hw": ["hello world"], "sayhello": ["%print('hello')"], "@voltbot": ["hi"], "@VoltBot": ["hi"], "<@!875485956206133259> ": ["hi"]}
